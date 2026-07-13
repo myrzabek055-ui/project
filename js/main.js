@@ -1,5 +1,3 @@
-// RANDOM COLOR GENERATOR
-
 const buttonsColor = document.querySelectorAll('.btn-color')
 const javaScript = document.querySelector('#js-color')
 
@@ -29,12 +27,11 @@ window.onkeydown = (event) => {
     }
 }
 
-// SLIDER BLOCK
-
 const slides = document.querySelectorAll('.slide')
 const next = document.querySelector('#next')
 const prev = document.querySelector('#prev')
 let index = 0
+let autoSliderId = null; 
 
 const hideSlide = () => {
     slides.forEach((slide) => {
@@ -43,35 +40,94 @@ const hideSlide = () => {
     })
 }
 const showSlide = (i = 0) => {
-    slides[i].style.opacity = 1
-    slides[i].classList.add('active_slide')
+    if (slides.length > 0) {
+        slides[i].style.opacity = 1
+        slides[i].classList.add('active_slide')
+    }
 }
 
-hideSlide()
-showSlide(index)
+if (slides.length > 0) {
+    hideSlide()
+    showSlide(index)
+}
 
+const startAutoSlider = () => {
+    if (slides.length > 0) {
+        autoSliderId = setInterval(() => {
+            index++
+            if (index > slides.length - 1) {
+                index = 0
+            }
+            hideSlide()
+            showSlide(index)
+        }, 3000) 
+    }
+}
 
-const autoSlider = (i = 0) => {
-    setInterval(() => {
-        i++
-        if (i > slides.length - 1) {
-            i = 0
-        }
+const resetAutoSlider = () => {
+    clearInterval(autoSliderId)
+    startAutoSlider()
+}
+
+if (next) {
+    next.onclick = () => {
+        index < slides.length - 1 ? index++ : index = 0
         hideSlide()
-        showSlide(i)
-    }, 10000)
+        showSlide(index)
+        resetAutoSlider() 
+    }
 }
 
-next.onclick = () => {
-    index < slides.length - 1 ? index++ : index = 0
-    hideSlide()
-    showSlide(index)
+if (prev) {
+    prev.onclick = () => {
+        index > 0 ? index-- : index = slides.length - 1
+        hideSlide()
+        showSlide(index)
+        resetAutoSlider() 
+    }
 }
 
-prev.onclick = () => {
-    index > 0 ? index-- : index = slides.length - 1
-    hideSlide()
-    showSlide(index)
+startAutoSlider()
+
+const modal = document.querySelector('.modal')
+const modalCloseButton = document.querySelector('.modal_close') 
+
+const openModal = () => {
+    if (modal) {
+        modal.style.display = 'block'
+        document.body.style.overflow = 'hidden'
+    }
 }
 
-autoSlider(index)
+const closeModal = () => {
+    if (modal) {
+        modal.style.display = 'none'
+        document.body.style.overflow = ''
+    }
+}
+
+if (modalCloseButton) {
+    modalCloseButton.onclick = () => closeModal()
+}
+
+if (modal) {
+    modal.onclick = (event) => {
+        if (event.target === modal) {
+            closeModal()
+        }
+    }
+}
+
+const checkScrollEnd = () => {
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1) {
+        openModal()
+        window.removeEventListener('scroll', checkScrollEnd)
+    }
+}
+window.addEventListener('scroll', checkScrollEnd)
+
+setTimeout(() => {
+    if (modal && modal.style.display !== 'block') {
+        openModal()
+    }
+}, 10000)

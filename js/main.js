@@ -199,29 +199,25 @@ const loadCharacters = () => {
     request.send();
 
     request.onload = () => {
-        if (request.status === 200) { // Каталардан коргоо үчүн текшерүү
-            try {
-                const data = JSON.parse(request.response);
-                container.innerHTML = '';
-                data.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'character-card';
-                    
-                    card.innerHTML = `
-                        <div class="character-photo">
-                            <img src="${item.photo}" alt="${item.name}">
-                        </div>
-                        <h3>${item.name}</h3>
-                        <p>Ролу: ${item.person}</p>
-                        <p>Жашы: ${item.age} жашта</p>
-                    `;
-                    container.append(card);
-                });
-            } catch (error) {
-                console.error("JSON форматында ката бар:", error);
-            }
-        } else {
-            console.error("characters.json жүктөлбөй калды. Статус:", request.status);
+        if (request.status === 200) {
+            const data = JSON.parse(request.response);
+            container.innerHTML = '';
+            
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'character-card';
+                
+                // Бул жерде Ролу -> Role, Жашы -> Age деп өзгөртүлдү
+                card.innerHTML = `
+                    <div class="character-photo">
+                        <img src="${item.photo}" alt="${item.name}">
+                    </div>
+                    <h3>${item.name}</h3>
+                    <p>Role: ${item.person}</p>
+                    <p>Age: ${item.age}</p>
+                `;
+                container.append(card);
+            });
         }
     };
 };

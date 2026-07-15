@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Naruto Uzumaki",
+        "person": "Ninja",
+        "age": 17,
+        "photo": "../img/naruto.png"
+    },
+    {
+        "name": "Monkey D. Luffy",
+        "person": "Pirate",
+        "age": 19,
+        "photo": "../img/luffy.png"
+    },
+    {
+        "name": "Son Goku",
+        "person": "Saiyan",
+        "age": 40,
+        "photo": "../img/goku.png"
+    }
+]

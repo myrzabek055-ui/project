@@ -89,18 +89,23 @@ const nextButton = document.querySelector('#btn-next');
 let cardId = 1;
 const maxCardId = 200;
 
-const getCard = (id) => {
-    fetch(`https://jsonplaceholder.typicode.com/todos/${id}`)
-        .then(response => response.json())
-        .then(data => {
-            card.innerHTML = `
-                <p>ID: ${data.id}</p>
-                <h4>${data.title}</h4>
-            `;
-        })
-        .catch(error => {
-            console.error('Ошибка:', error);
-        });
+const getCard = async (id) => {
+    try {
+        const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`);
+
+        if (!response.ok) {
+            throw new Error(`Ошибка: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        card.innerHTML = `
+            <p>ID: ${data.id}</p>
+            <h4>${data.title}</h4>
+        `;
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
 };
 
 nextButton.onclick = () => {
@@ -128,11 +133,20 @@ getCard(cardId);
 
 // ==================== FETCH POSTS ====================
 
-fetch('https://jsonplaceholder.typicode.com/posts')
-    .then(response => response.json())
-    .then(data => {
+const getPosts = async () => {
+    try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+
+        if (!response.ok) {
+            throw new Error(`Ошибка: ${response.status}`);
+        }
+
+        const data = await response.json();
+
         console.log(data);
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Ошибка:', error);
-    });
+    }
+};
+
+getPosts();

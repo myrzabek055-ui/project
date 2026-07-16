@@ -79,3 +79,60 @@ const convert = (elem, target, target2) => {
 convert(somInput, usdInput, eurInput);
 convert(usdInput, somInput, eurInput);
 convert(eurInput, somInput, usdInput);
+
+// ==================== CARD SWITCHER ====================
+
+const card = document.querySelector('.card');
+const prevButton = document.querySelector('#btn-prev');
+const nextButton = document.querySelector('#btn-next');
+
+let cardId = 1;
+const maxCardId = 200;
+
+const getCard = (id) => {
+    fetch(`https://jsonplaceholder.typicode.com/todos/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            card.innerHTML = `
+                <p>ID: ${data.id}</p>
+                <h4>${data.title}</h4>
+            `;
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+        });
+};
+
+nextButton.onclick = () => {
+    cardId++;
+
+    if (cardId > maxCardId) {
+        cardId = 1;
+    }
+
+    getCard(cardId);
+};
+
+prevButton.onclick = () => {
+    cardId--;
+
+    if (cardId < 1) {
+        cardId = maxCardId;
+    }
+
+    getCard(cardId);
+};
+
+// Карточка башында бош болбошу үчүн
+getCard(cardId);
+
+// ==================== FETCH POSTS ====================
+
+fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
